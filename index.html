@@ -574,6 +574,79 @@
             transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        .top-item-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .category-vs-target-bar {
+            position: relative;
+            overflow: visible;
+        }
+
+        .category-target-marker {
+            position: absolute;
+            right: 0;
+            top: -3px;
+            width: 3px;
+            height: 16px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #f59e0b 0%, #dc2626 100%);
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.9), 0 0 12px rgba(245,158,11,0.35);
+        }
+
+        .category-target-label {
+            position: absolute;
+            right: -2px;
+            top: -22px;
+            font-size: 0.68em;
+            font-weight: 800;
+            color: #f59e0b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .category-vs-target-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            font-size: 0.86em;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .category-vs-target-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            color: #4338ca;
+            font-size: 0.82em;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .category-vs-target-badge.achieved {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #166534;
+        }
+
+        .category-target-diff {
+            margin-top: 6px;
+            font-size: 0.84em;
+            font-weight: 700;
+            color: #16a34a;
+        }
+
+        .category-target-diff.need-push {
+            color: #f59e0b;
+        }
+
         /* Medal colors for top 3 */
         .top-item:nth-child(1) .top-item-rank {
             color: #f59e0b;
@@ -875,7 +948,7 @@
     </div>
 
     <script>
-        const SALES_API_URL = 'https://script.google.com/macros/s/AKfycbzCvnX2nuXGQ94sq49QHJ2nWSNOfUUG1brS9bWdNFxbtAZbRChClTdjhUeYYyFq4f8t7A/exec';
+        const SALES_API_URL = 'https://script.google.com/macros/s/AKfycbxVn9HabA0qNfwHTvG4dXwl3KHxAdDG6H-UkLptYLvkgpZ4YyOnG2HafvQS_ltOgdx6nQ/exec';
 
         function formatCurrency(amount) {
             return new Intl.NumberFormat('id-ID', {
@@ -971,13 +1044,54 @@
             return `
                 <div class="top-item">
                     <span class="top-item-rank">#${rank}</span>
-                    <div style="flex: 1;">
+                    <div class="top-item-content">
                         <div class="top-item-name">${item.name}</div>
                         <div class="top-item-bar">
                             <div class="top-item-bar-fill" style="width: ${percentage}%"></div>
                         </div>
                     </div>
                     <span class="top-item-value">${formatCurrency(item.total)}</span>
+                </div>
+            `;
+        }
+
+        function createCategoryVsTargetItem(item, rank) {
+            const sales = Number(item.sales ?? item.total ?? 0);
+            const target = Number(item.target ?? 0);
+            const achievementPercent = target > 0
+                ? Number(item.achievementPercent ?? ((sales / target) * 100))
+                : 0;
+            const progressWidth = target > 0 ? Math.min(achievementPercent, 100) : 0;
+            const isTargetReached = target > 0 ? sales >= target : false;
+            const difference = sales - target;
+
+            let diffText = 'Target belum diatur';
+            let diffClass = 'category-target-diff';
+
+            if (target > 0 && isTargetReached) {
+                diffText = `+${formatCurrency(Math.abs(difference))} di atas target`;
+            } else if (target > 0) {
+                diffText = `${formatCurrency(Math.abs(difference))} menuju target`;
+                diffClass = 'category-target-diff need-push';
+            }
+
+            return `
+                <div class="top-item">
+                    <span class="top-item-rank">#${rank}</span>
+                    <div class="top-item-content">
+                        <div class="top-item-name">${item.name}</div>
+                        <div class="top-item-bar category-vs-target-bar">
+                            <div class="top-item-bar-fill" style="width: ${progressWidth}%"></div>
+                            ${target > 0 ? '<div class="category-target-marker"></div><div class="category-target-label">Target</div>' : ''}
+                        </div>
+                        <div class="category-vs-target-meta">
+                            <span>Sales: ${formatCurrency(sales)}</span>
+                            <span>Target: ${target > 0 ? formatCurrency(target) : '-'}</span>
+                            <span class="category-vs-target-badge ${isTargetReached ? 'achieved' : ''}">${target > 0 ? achievementPercent.toFixed(1) + '%' : 'No Target'}</span>
+                        </div>
+                        <div class="${diffClass}">${diffText}</div>
+                    </div>
+                    <span class="top-item-value">${formatCurrency(sales)}</span>
                 </div>
             `;
         }
@@ -1028,10 +1142,9 @@
                 updateIncentiveMilestones(data.progressPercent);
                 updateAchievementBadge(data.progressPercent);
 
-                const maxCategory = data.topCategories[0]?.total || 1;
                 document.getElementById('topCategories').innerHTML = 
                     data.topCategories.map((item, index) => 
-                        createTopItem(item, index + 1, maxCategory)
+                        createCategoryVsTargetItem(item, index + 1)
                     ).join('');
 
                 const maxStore = data.topStores[0]?.total || 1;
