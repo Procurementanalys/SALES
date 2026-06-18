@@ -1,1175 +1,1242 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 Dashboard Sales - KAIZEN SPIRIT</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .main-container {
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* Logo Header */
-        .logo-header {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        .logo-header img {
-            max-width: 200px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 35px;
-            animation: fadeInDown 0.8s ease;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header h1 {
-            font-size: 2.8em;
-            margin-bottom: 10px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-            font-weight: 400;
-        }
-
-        /* Kaizen Banner */
-        .kaizen-banner {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #f06595 100%);
-            border-radius: 16px;
-            padding: 28px 35px;
-            margin-bottom: 30px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 8px 32px rgba(238, 90, 111, 0.4);
-            animation: fadeInAnim 1s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .kaizen-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 8s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes fadeInAnim {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .kaizen-banner h2 {
-            font-size: 2.2em;
-            margin-bottom: 12px;
-            font-weight: 800;
-            position: relative;
-            z-index: 1;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .kaizen-banner p {
-            font-size: 1.4em;
-            opacity: 0.98;
-            font-weight: 600;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Metrics Grid - 4 KOLOM */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .metric-card {
-            background: white;
-            border-radius: 16px;
-            padding: 32px 28px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.6s ease;
-            border-left: 5px solid #667eea;
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .metric-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .metric-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
-        }
-
-        .metric-label {
-            color: #64748b;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 18px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .metric-value {
-            font-size: 2em;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 8px;
-            line-height: 1.3;
-            word-wrap: normal;
-            overflow-wrap: normal;
-            white-space: nowrap;
-            overflow: visible;
-            display: inline-block;
-            max-width: 100%;
-        }
-
-        .metric-value-wrapper {
-            overflow-x: auto;
-            overflow-y: visible;
-            padding: 5px 0;
-            margin: 5px 0;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .metric-value-wrapper::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .metric-value-wrapper::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 2px;
-        }
-
-        .metric-value-wrapper::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 2px;
-        }
-
-        .metric-subtitle {
-            color: #94a3b8;
-            font-size: 0.9em;
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-
-        .trend-indicator {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 700;
-            margin-top: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .trend-up {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-
-        .trend-down {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        /* Progress Card */
-        .progress-card {
-            background: white;
-            border-radius: 16px;
-            padding: 36px 32px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-            animation: fadeInUp 0.8s ease;
-            border-left: 5px solid #f59e0b;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .progress-main-value {
-            font-size: 4em;
-            font-weight: 800;
-            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 50%, #7c3aed 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-            display: inline-block;
-            white-space: nowrap;
-        }
-
-        .achievement-badge {
-            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
-            padding: 14px 28px;
-            border-radius: 24px;
-            font-weight: 800;
-            color: white;
-            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
-            font-size: 1.1em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 6px 24px rgba(245, 158, 11, 0.6);
-            }
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            height: 32px;
-            background: #f1f5f9;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 28px;
-            position: relative;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #f59e0b 0%, #dc2626 50%, #7c3aed 100%);
-            border-radius: 16px;
-            transition: width 2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
-            background-size: 200% 100%;
-            animation: progressShine 3s linear infinite;
-        }
-
-        @keyframes progressShine {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* Quote Kaizen */
-        .kaizen-quote {
-            background: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
-            border-radius: 16px;
-            padding: 28px 32px;
-            margin: 24px 0;
-            text-align: center;
-            color: white;
-            font-style: italic;
-            font-size: 1.3em;
-            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            animation: fadeInAnim 1.2s ease;
-        }
-
-        /* Incentive Milestones */
-        .incentive-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-top: 28px;
-        }
-
-        .incentive-card {
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 26px 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 3px solid #e2e8f0;
-            position: relative;
-        }
-
-        .incentive-card.achieved {
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-            border-color: #22c55e;
-            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.25);
-            animation: celebration 0.6s ease;
-        }
-
-        @keyframes celebration {
-            0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.05) rotate(2deg); }
-            75% { transform: scale(1.05) rotate(-2deg); }
-        }
-
-        .incentive-card.active {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-color: #f59e0b;
-            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
-            animation: glow 2s infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { 
-                box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
-            }
-            50% { 
-                box-shadow: 0 8px 32px rgba(245, 158, 11, 0.6);
-            }
-        }
-
-        .incentive-icon {
-            font-size: 3.2em;
-            margin-bottom: 12px;
-            display: block;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .incentive-title {
-            font-size: 1.5em;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .incentive-target {
-            font-size: 0.95em;
-            color: #64748b;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .incentive-status {
-            font-weight: 700;
-            padding: 8px 18px;
-            border-radius: 20px;
-            display: inline-block;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-achieved {
-            background: #22c55e;
-            color: white;
-        }
-
-        .status-progress {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .status-locked {
-            background: #cbd5e1;
-            color: #64748b;
-        }
-
-        .incentive-mini-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(0,0,0,0.08);
-            border-radius: 6px;
-            margin-top: 14px;
-            overflow: hidden;
-        }
-
-        .incentive-mini-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #f59e0b, #dc2626);
-            border-radius: 6px;
-            transition: width 1.2s ease;
-        }
-
-        /* Charts Grid */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-bottom: 30px;
-        }
-
-        .chart-card {
-            background: white;
-            border-radius: 16px;
-            padding: 32px 28px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            animation: fadeInUp 1s ease;
-            border-left: 5px solid #22c55e;
-        }
-
-        .chart-title {
-            font-size: 1.6em;
-            color: #1e293b;
-            margin-bottom: 26px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .top-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 12px;
-            border-bottom: 1px solid #f1f5f9;
-            transition: all 0.25s ease;
-        }
-
-        .top-item:hover {
-            background: #f8fafc;
-            padding-left: 20px;
-            border-radius: 10px;
-            transform: translateX(4px);
-        }
-
-        .top-item:last-child {
-            border-bottom: none;
-        }
-
-        .top-item-rank {
-            font-weight: 800;
-            color: #667eea;
-            margin-right: 16px;
-            font-size: 1.4em;
-            min-width: 45px;
-        }
-
-        .top-item-name {
-            flex: 1;
-            color: #334155;
-            font-weight: 600;
-            font-size: 1.05em;
-        }
-
-        .top-item-value {
-            font-weight: 800;
-            color: #1e293b;
-            font-size: 1.05em;
-            margin-left: 16px;
-            white-space: nowrap;
-            overflow: visible;
-            padding-left: 10px;
-        }
-
-        .top-item-bar {
-            width: 100%;
-            height: 10px;
-            background: #f1f5f9;
-            border-radius: 6px;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-
-        .top-item-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
-            border-radius: 6px;
-            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .top-item-content {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .category-vs-target-bar {
-            position: relative;
-            overflow: visible;
-        }
-
-        .category-target-marker {
-            position: absolute;
-            right: 0;
-            top: -3px;
-            width: 3px;
-            height: 16px;
-            border-radius: 999px;
-            background: linear-gradient(180deg, #f59e0b 0%, #dc2626 100%);
-            box-shadow: 0 0 0 2px rgba(255,255,255,0.9), 0 0 12px rgba(245,158,11,0.35);
-        }
-
-        .category-target-label {
-            position: absolute;
-            right: -2px;
-            top: -22px;
-            font-size: 0.68em;
-            font-weight: 800;
-            color: #f59e0b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .category-vs-target-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-            font-size: 0.86em;
-            color: #64748b;
-            font-weight: 700;
-        }
-
-        .category-vs-target-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5px 10px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-            color: #4338ca;
-            font-size: 0.82em;
-            font-weight: 800;
-            white-space: nowrap;
-        }
-
-        .category-vs-target-badge.achieved {
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-            color: #166534;
-        }
-
-        .category-target-diff {
-            margin-top: 6px;
-            font-size: 0.84em;
-            font-weight: 700;
-            color: #16a34a;
-        }
-
-        .category-target-diff.need-push {
-            color: #f59e0b;
-        }
-
-        /* Medal colors for top 3 */
-        .top-item:nth-child(1) .top-item-rank {
-            color: #f59e0b;
-            font-size: 1.8em;
-        }
-
-        .top-item:nth-child(2) .top-item-rank {
-            color: #94a3b8;
-            font-size: 1.7em;
-        }
-
-        .top-item:nth-child(3) .top-item-rank {
-            color: #d97706;
-            font-size: 1.6em;
-        }
-
-        /* Refresh Button */
-        .refresh-btn {
-            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
-            color: white;
-            border: none;
-            padding: 18px 42px;
-            border-radius: 28px;
-            font-size: 1.1em;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-            transition: all 0.3s ease;
-            margin: 20px auto;
-            display: block;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .refresh-btn:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.5);
-        }
-
-        .refresh-btn:active {
-            transform: translateY(-2px);
-        }
-
-        /* Loading & Error States */
-        .loading {
-            text-align: center;
-            color: white;
-            font-size: 2em;
-            padding: 60px;
-            font-weight: 700;
-            animation: loadingPulse 1.5s infinite;
-        }
-
-        @keyframes loadingPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .error {
-            background: #fef2f2;
-            color: #dc2626;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            margin: 20px 0;
-            font-weight: 600;
-            border: 2px solid #fee2e2;
-        }
-
-        .last-update {
-            text-align: center;
-            color: white;
-            opacity: 0.9;
-            font-size: 0.95em;
-            margin-top: 24px;
-            font-weight: 500;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1400px) {
-            .metrics-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .incentive-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .incentive-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .metric-value {
-                font-size: 1.6em;
-            }
-
-            .progress-main-value {
-                font-size: 3em;
-            }
-
-            .incentive-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .progress-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .achievement-badge {
-                font-size: 1em;
-                padding: 12px 24px;
-            }
-        }
-
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Sales - Kaizen Spirit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    /* PREMIUM CORPORATE PALETTE — Alpro Royal Edition */
+    --navy-deep:#070d24;
+    --navy:#0d1740;
+    --navy-light:#1a2a6b;
+    --navy-card-border:#2d4499;
+    --alpro-blue:#1e3a8a;
+    --alpro-blue-bright:#2563eb;
+    --cyan-accent:#06b6d4;
+    --fire1:#ff4d6d;
+    --fire2:#ffa94d;
+    --kaizen1:#7c3aed;
+    --kaizen2:#ec4899;
+    --gold:#fbbf24;
+    --gold-rich:#f59e0b;
+    --green:#10b981;
+    --green-light:#d1fae5;
+    --emerald:#059669;
+    --ink:#0f172a;
+    --muted:#64748b;
+    --paper:#f8fafc;
+    --line:#e2e8f0;
+    --bronze:#cd7f32;
+    --silver:#94a3b8;
+    --diamond:#38bdf8;
+    --radius:20px;
+    --shadow: 0 10px 30px -12px rgba(15,27,61,.35);
+    --shadow-lg: 0 25px 60px -15px rgba(15,27,61,.55);
+    --shadow-glow: 0 0 50px -5px rgba(124,58,237,.45);
+    --grad-fire: linear-gradient(135deg,var(--fire1),var(--fire2));
+    --grad-kaizen: linear-gradient(135deg,var(--kaizen1),var(--kaizen2));
+    --grad-gold: linear-gradient(135deg,#fbbf24,#f59e0b);
+    --grad-royal: linear-gradient(135deg,#1e3a8a 0%,#7c3aed 50%,#ec4899 100%);
+    --grad-aurora: linear-gradient(135deg,#06b6d4 0%,#7c3aed 50%,#ec4899 100%);
+    --glass-bg: rgba(255,255,255,.06);
+    --glass-border: rgba(255,255,255,.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  /* ANIMATED BACKGROUND - cosmic kaizen */
+  body{
+    margin:0; font-family:'Inter',sans-serif; color:var(--ink);
+    background:
+      radial-gradient(ellipse 90% 70% at 15% -5%, rgba(124,58,237,.28), transparent 55%),
+      radial-gradient(ellipse 80% 60% at 90% 10%, rgba(236,72,153,.20), transparent 55%),
+      radial-gradient(ellipse 70% 80% at 50% 110%, rgba(6,182,212,.15), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(30,58,138,.18), transparent 70%),
+      var(--navy-deep);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+  /* Premium grid overlay */
+  body::after{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(rgba(124,58,237,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,.04) 1px, transparent 1px);
+    background-size:60px 60px;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 75%);
+  }
+  /* Floating orbs background */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      radial-gradient(circle at 15% 25%, rgba(255,182,39,.06) 0, transparent 2%),
+      radial-gradient(circle at 85% 75%, rgba(224,36,158,.07) 0, transparent 2%),
+      radial-gradient(circle at 50% 50%, rgba(58,176,255,.05) 0, transparent 1.5%);
+    background-size:600px 600px, 800px 800px, 500px 500px;
+    animation:driftBg 30s linear infinite;
+  }
+  @keyframes driftBg{
+    0%{background-position:0 0, 0 0, 0 0;}
+    100%{background-position:600px 600px, -800px 800px, 500px -500px;}
+  }
+  .wrap{max-width:1280px;margin:0 auto;padding:28px 20px 60px;position:relative;z-index:1;}
+  h1,h2,h3,.display{font-family:'Outfit',sans-serif;}
+
+  /* SCROLL REVEAL */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.05);opacity:.85;}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+  @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(139,47,240,.3);}50%{box-shadow:0 0 35px rgba(255,93,108,.5);}}
+  @keyframes rotateBg{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+  @keyframes slideInLeft{from{opacity:0;transform:translateX(-30px);}to{opacity:1;transform:translateX(0);}}
+
+  /* HEADER - premium glass with aurora */
+  .header{
+    background:
+      radial-gradient(circle at 20% 0%,#1e3a8a 0%,#1a2a6b 35%,var(--navy) 65%,var(--navy-deep) 100%);
+    border-radius:32px; padding:48px 20px 40px; text-align:center;
+    position:relative; overflow:hidden;
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:
+      0 30px 80px -20px rgba(0,0,0,.6),
+      0 0 0 1px rgba(124,58,237,.15),
+      inset 0 1px 0 rgba(255,255,255,.12),
+      inset 0 -100px 80px -60px rgba(124,58,237,.15);
+    animation:fadeUp .8s ease both;
+  }
+  /* Aurora wave effect */
+  .header::before{
+    content:""; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+    background:
+      conic-gradient(from 0deg at 50% 50%,
+        transparent 0deg, rgba(124,58,237,.22) 50deg,
+        transparent 110deg, rgba(236,72,153,.18) 170deg,
+        transparent 230deg, rgba(6,182,212,.16) 290deg,
+        transparent 350deg, rgba(251,191,36,.12) 360deg);
+    animation:rotateBg 30s linear infinite;
+    pointer-events:none; opacity:.85;
+  }
+  /* Diagonal pattern overlay */
+  .header::after{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px);
+    pointer-events:none;
+  }
+  .header > *{position:relative;z-index:2;}
+  /* LOGO LOCKUP */
+  .brand-logo-wrap{
+    display:flex;justify-content:center;align-items:center;
+    margin:0 auto 18px;position:relative;
+    animation:float 6s ease-in-out infinite;
+  }
+  .brand-logo-wrap::before{
+    content:""; position:absolute; inset:-12px;
+    background:radial-gradient(circle, rgba(124,58,237,.45), rgba(236,72,153,.25) 40%, transparent 70%);
+    filter:blur(20px); z-index:0; opacity:.9;
+    animation:pulse 3.5s ease-in-out infinite;
+  }
+  .brand-logo{
+    position:relative; z-index:1;
+    width:92px; height:92px;
+    border-radius:22px;
+    background:#fff;
+    padding:8px;
+    box-shadow:
+      0 20px 50px -10px rgba(0,0,0,.5),
+      0 0 0 1px rgba(255,255,255,.2),
+      0 0 40px rgba(124,58,237,.4);
+    object-fit:contain;
+    transition:transform .4s cubic-bezier(.4,0,.2,1);
+  }
+  .brand-logo:hover{transform:scale(1.08) rotate(-3deg);}
+
+  .eyebrow{
+    display:inline-block;
+    color:#c7d2fe;letter-spacing:.28em;font-size:11.5px;font-weight:800;text-transform:uppercase;margin-bottom:14px;
+    padding:7px 18px;border-radius:30px;
+    background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(236,72,153,.10));
+    border:1px solid rgba(199,210,254,.25);
+    backdrop-filter:blur(10px);
+    box-shadow:0 4px 20px -4px rgba(124,58,237,.4), inset 0 1px 0 rgba(255,255,255,.1);
+  }
+  .header h1{
+    color:#fff;font-size:clamp(28px,4.5vw,52px);font-weight:900;margin:0 0 10px;letter-spacing:-.025em;
+    background:linear-gradient(120deg,#fff 0%,#fff 25%,#fde68a 45%,#fbcfe8 60%,#c7d2fe 75%,#fff 95%);
+    background-size:250% auto;
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    animation:shimmer 6s linear infinite;
+    text-shadow:0 4px 30px rgba(124,58,237,.4);
+  }
+  .header .sub{color:#aebbdd;font-size:15px;margin:0 0 24px;font-weight:500;letter-spacing:.02em;}
+  .header-meta{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:24px;font-size:12.5px;color:#e1e8fa;font-weight:500;}
+  .header-meta span{
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+    padding:7px 16px;border-radius:30px;
+    backdrop-filter:blur(10px);
+    transition:all .25s ease;
+  }
+  .header-meta span:hover{background:rgba(255,255,255,.12);transform:translateY(-1px);border-color:rgba(255,255,255,.3);}
+  .btn-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .btn{
+    border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:700;font-size:14.5px;
+    padding:13px 28px;border-radius:30px;
+    transition:all .25s cubic-bezier(.4,0,.2,1);
+    display:inline-flex;align-items:center;gap:8px;
+    position:relative;overflow:hidden;letter-spacing:.01em;
+  }
+  .btn::before{
+    content:""; position:absolute; top:0; left:-100%; width:100%; height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+    transition:left .6s ease;
+  }
+  .btn:hover::before{left:100%;}
+  .btn:hover{transform:translateY(-3px) scale(1.02);}
+  .btn:active{transform:translateY(-1px) scale(.98);}
+  .btn-primary{
+    background:linear-gradient(135deg,var(--fire1),var(--fire2));color:#fff;
+    box-shadow:0 10px 28px -8px rgba(255,93,108,.7), inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  .btn-primary:hover{box-shadow:0 16px 36px -10px rgba(255,93,108,.85), inset 0 1px 0 rgba(255,255,255,.3);}
+  .btn-ghost{
+    background:rgba(255,255,255,.08);color:#fff;
+    border:1px solid rgba(255,255,255,.25);
+    backdrop-filter:blur(10px);
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);}
+
+  /* BANNERS - glowing edge with shimmer */
+  .banner{
+    margin:22px 0;padding:22px 28px;border-radius:20px;color:#fff;
+    box-shadow:var(--shadow-lg);
+    position:relative;overflow:hidden;
+    animation:fadeUp .7s ease both;
+  }
+  .banner::before{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.18) 50%,transparent 70%);
+    background-size:200% 100%;
+    animation:shimmer 4s linear infinite;
+    pointer-events:none;
+  }
+  .banner::after{
+    content:""; position:absolute; top:-2px; left:-2px; right:-2px; bottom:-2px;
+    border-radius:22px; z-index:-1; opacity:.5; filter:blur(20px);
+    background:inherit;
+  }
+  .banner-momentum{background:linear-gradient(110deg,var(--fire1),#ff7e8d 60%,var(--fire2));}
+  .banner-quote{background:linear-gradient(110deg,var(--kaizen1),var(--kaizen2));font-style:italic;}
+  .banner h3{margin:0 0 4px;font-size:21px;font-weight:800;display:flex;gap:10px;align-items:center;justify-content:center;text-align:center;position:relative;z-index:1;letter-spacing:-.01em;}
+  .banner p{margin:0;text-align:center;font-size:14.5px;opacity:.96;position:relative;z-index:1;font-weight:500;}
+
+  /* KPI CARDS - glass premium with hover lift */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:26px 0;}
+  @media(max-width:920px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.kpi-grid{grid-template-columns:1fr;}}
+  .card{
+    background:linear-gradient(180deg,#ffffff 0%,#fafbff 100%);
+    border-radius:var(--radius);padding:22px 24px;
+    box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.8);
+    border:1px solid var(--line);
+    position:relative;overflow:hidden;
+    transition:transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s ease, border-color .35s ease;
+    animation:fadeUp .6s ease both;
+  }
+  .card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--cyan-accent),var(--kaizen1),var(--fire1),var(--gold));
+    background-size:200% 100%;
+    opacity:0; transition:opacity .35s ease;
+    animation:shimmer 4s linear infinite;
+  }
+  .card::after{
+    content:""; position:absolute; top:-50%; right:-50%; width:200%; height:200%;
+    background:radial-gradient(circle at center, rgba(124,58,237,.06), transparent 40%);
+    opacity:0; transition:opacity .4s ease; pointer-events:none;
+  }
+  .card:hover{transform:translateY(-6px) scale(1.01);box-shadow:var(--shadow-lg), 0 0 0 1px rgba(124,58,237,.15);border-color:rgba(124,58,237,.3);}
+  .card:hover::before{opacity:1;}
+  .card:hover::after{opacity:1;}
+  .kpi-grid .card:nth-child(1){animation-delay:.05s;}
+  .kpi-grid .card:nth-child(2){animation-delay:.1s;}
+  .kpi-grid .card:nth-child(3){animation-delay:.15s;}
+  .kpi-grid .card:nth-child(4){animation-delay:.2s;}
+
+  .kpi-label{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:12px;}
+  .kpi-value{font-size:26px;font-weight:800;color:var(--ink);line-height:1.15;letter-spacing:-.02em;}
+  .kpi-value.purple{
+    background:linear-gradient(135deg,#8b2ff0,#e0249e);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .kpi-foot{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.5;}
+  .kpi-edit{width:100%;border:1.5px dashed var(--line);border-radius:10px;padding:8px 10px;font-family:'Outfit',sans-serif;font-weight:700;font-size:18px;color:var(--ink);margin-top:2px;background:var(--paper);}
+  .kpi-edit:focus{outline:2px solid var(--fire2);border-style:solid;}
+  .badge{
+    display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
+    padding:6px 14px;border-radius:20px;margin-top:10px;
+    transition:all .25s ease;
+  }
+  .badge:hover{transform:scale(1.05);}
+  .badge-purple{background:linear-gradient(135deg,#f1e3ff,#fce3f5);color:#8b2ff0;box-shadow:0 4px 12px -4px rgba(139,47,240,.3);}
+  .badge-green{background:linear-gradient(135deg,#d9f7e8,#c2f4d4);color:#0f8a52;box-shadow:0 4px 12px -4px rgba(31,182,114,.3);}
+  .badge-red{background:linear-gradient(135deg,#ffe3e6,#ffd1d6);color:#d6304a;box-shadow:0 4px 12px -4px rgba(214,48,74,.3);}
+
+  /* SECTION TITLES with accent line */
+  .section-title{
+    color:#fff;display:flex;align-items:center;gap:12px;
+    font-size:20px;font-weight:800;margin:32px 2px 16px;
+    letter-spacing:-.01em;
+    position:relative;padding-left:14px;
+    animation:slideInLeft .5s ease both;
+  }
+  .section-title::before{
+    content:""; position:absolute; left:0; top:50%; transform:translateY(-50%);
+    width:4px; height:24px; border-radius:4px;
+    background:linear-gradient(180deg,var(--fire1),var(--kaizen1));
+    box-shadow:0 0 12px rgba(255,93,108,.5);
+  }
+  .section-title .tag{
+    font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;
+    color:#9db3e8;background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+    padding:4px 12px;border-radius:20px;
+    backdrop-filter:blur(10px);
+  }
+
+  /* PROGRESS - animated gradient fill with stripes */
+  .progress-card{padding:30px 30px 26px;}
+  .progress-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:20px;}
+  .progress-pct{
+    font-size:46px;font-weight:900;
+    background:linear-gradient(90deg,var(--fire1),var(--kaizen1),var(--gold));
+    background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    letter-spacing:-.03em;line-height:1;
+    animation:shimmer 4s linear infinite;
+  }
+  .progress-remain{font-size:13.5px;color:var(--muted);margin-top:6px;font-weight:500;}
+  .progress-track{
+    height:18px;background:var(--paper);border-radius:30px;
+    overflow:hidden;position:relative;margin-bottom:28px;
+    border:1px solid var(--line);
+    box-shadow:inset 0 2px 4px rgba(15,27,61,.08);
+  }
+  .progress-fill{
+    height:100%;border-radius:30px;
+    background:
+      linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%) 0 0/20px 20px,
+      linear-gradient(90deg,var(--kaizen1),var(--fire1) 60%,var(--gold));
+    transition:width .8s cubic-bezier(.4,0,.2,1);
+    box-shadow:0 0 20px rgba(255,93,108,.4), inset 0 1px 0 rgba(255,255,255,.3);
+    position:relative;
+    animation:progressStripes 1s linear infinite;
+  }
+  @keyframes progressStripes{from{background-position:0 0, 0 0;}to{background-position:20px 0, 0 0;}}
+  .tier-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media(max-width:760px){.tier-grid{grid-template-columns:repeat(2,1fr);}}
+  .tier{
+    border-radius:16px;padding:18px 12px;text-align:center;
+    border:1.5px solid var(--line);background:var(--paper);
+    transition:all .3s cubic-bezier(.4,0,.2,1);
+    position:relative;overflow:hidden;
+  }
+  .tier:hover{transform:translateY(-3px);box-shadow:0 10px 25px -10px rgba(15,27,61,.2);}
+  .tier.active{
+    border-color:var(--green);
+    background:linear-gradient(135deg,#d9f7e8,#c2f4d4);
+    box-shadow:0 8px 20px -8px rgba(31,182,114,.4);
+  }
+  .tier.current{
+    border-color:var(--gold);
+    background:linear-gradient(135deg,#fff3cd,#ffe8a3);
+    animation:glow 2s ease-in-out infinite;
+  }
+  .tier .medal{font-size:30px;display:inline-block;transition:transform .3s ease;}
+  .tier:hover .medal{transform:scale(1.15) rotate(-5deg);}
+  .tier.current .medal{animation:float 2.5s ease-in-out infinite;}
+  .tier .tname{font-weight:800;font-size:14px;margin:8px 0 2px;letter-spacing:.02em;}
+  .tier .ttarget{font-size:11.5px;color:var(--muted);}
+  .tier .tstate{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;}
+  .tier.active .tstate{background:#1fb672;color:#fff;box-shadow:0 4px 10px -2px rgba(31,182,114,.5);}
+  .tier.locked .tstate{background:#e7eaf2;color:var(--muted);}
+  .tier.current .tstate{background:var(--gold);color:#5b3b00;box-shadow:0 4px 10px -2px rgba(255,182,39,.6);}
+
+  /* OFFICER TABLE - polished */
+  .officer-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px;}
+  .officer-table th{
+    text-align:left;padding:11px 12px;color:var(--muted);
+    font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;
+    border-bottom:2px solid var(--line);
+    background:linear-gradient(180deg,var(--paper),#fff);
+  }
+  .officer-table th.r{text-align:right;}
+  .officer-table td{padding:12px 12px;border-bottom:1px solid var(--line);vertical-align:middle;transition:background .2s ease;}
+  .officer-table td.r{text-align:right;font-weight:700;}
+  .officer-table tr:last-child td{border-bottom:none;}
+  .officer-table tr{transition:transform .2s ease;}
+  .officer-table tr:hover td{background:linear-gradient(90deg,rgba(139,47,240,.04),rgba(255,93,108,.04));}
+  .rank-badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border-radius:50%;font-weight:800;font-size:12px;
+    background:var(--paper);color:var(--muted);
+    box-shadow:inset 0 0 0 1px rgba(15,27,61,.06);
+  }
+  .rank-badge.r1{background:linear-gradient(135deg,#ffd700,#ffb627);color:#5b3b00;box-shadow:0 4px 12px -2px rgba(255,182,39,.5);}
+  .rank-badge.r2{background:linear-gradient(135deg,#e8eaed,#b8c0cc);color:#3a4554;box-shadow:0 4px 12px -2px rgba(154,165,182,.5);}
+  .rank-badge.r3{background:linear-gradient(135deg,#e0a878,#cd7f32);color:#fff;box-shadow:0 4px 12px -2px rgba(205,127,50,.5);}
+  .pct-pill{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:12px;transition:all .2s ease;}
+  .pct-pill:hover{transform:scale(1.08);}
+  .pill-green{background:linear-gradient(135deg,var(--green-light),#c2f4d4);color:#0f8a52;}
+  .pill-red{background:linear-gradient(135deg,#ffe3e6,#ffd1d6);color:#d6304a;}
+  .pill-amber{background:linear-gradient(135deg,#fff3cd,#ffe8a3);color:#92610a;}
+
+  /* TOP STORES - row hover lift */
+  .top-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media(max-width:920px){.top-grid{grid-template-columns:1fr;}}
+  .panel-head{
+    display:flex;align-items:center;gap:10px;
+    font-weight:800;font-size:16px;margin-bottom:18px;
+    padding-bottom:14px;border-bottom:2px solid var(--line);
+    letter-spacing:-.01em;
+  }
+  .row-item{
+    padding:14px 12px;border-bottom:1px solid var(--line);
+    margin:0 -12px;border-radius:10px;
+    transition:all .25s ease;
+  }
+  .row-item:last-child{border-bottom:none;}
+  .row-item:hover{
+    background:linear-gradient(90deg,rgba(139,47,240,.04),rgba(255,93,108,.04));
+    transform:translateX(4px);
+  }
+  .row-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .rank{font-weight:800;font-size:14px;color:var(--muted);width:28px;flex-shrink:0;font-family:'Outfit',sans-serif;}
+  .rank.r1{color:var(--gold);text-shadow:0 0 12px rgba(255,182,39,.4);}
+  .rank.r2{color:var(--silver);text-shadow:0 0 8px rgba(154,165,182,.4);}
+  .rank.r3{color:var(--bronze);text-shadow:0 0 8px rgba(205,127,50,.4);}
+  .name-block{flex:1;min-width:0;}
+  .name-block .nm{font-weight:700;font-size:13.5px;color:var(--ink);}
+  .name-block .meta-line{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .val{font-weight:800;font-size:14px;text-align:right;white-space:nowrap;color:var(--ink);}
+  .bar-track{
+    height:9px;background:var(--paper);border-radius:8px;margin-top:10px;
+    overflow:hidden;box-shadow:inset 0 1px 2px rgba(15,27,61,.06);
+  }
+  .bar-fill{
+    height:100%;border-radius:8px;
+    background:linear-gradient(90deg,var(--kaizen1),var(--fire1));
+    box-shadow:0 0 10px rgba(139,47,240,.3);
+    transition:width .8s cubic-bezier(.4,0,.2,1);
+    position:relative;
+  }
+  .bar-fill::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+    background-size:200% 100%;
+    animation:shimmer 2.5s linear infinite;
+  }
+
+  /* FULL STORE TABLE */
+  .table-toggle{
+    width:100%;text-align:center;background:none;
+    border:1.5px dashed var(--navy-card-border);color:#cdd8f5;
+    padding:14px;border-radius:14px;font-family:'Outfit',sans-serif;font-weight:700;cursor:pointer;
+    margin-top:14px;transition:all .25s ease;letter-spacing:.02em;
+  }
+  .table-toggle:hover{
+    background:rgba(139,47,240,.08);border-color:var(--kaizen1);
+    color:#fff;transform:translateY(-1px);
+  }
+  .full-table-wrap{display:none;margin-top:14px;animation:fadeUp .4s ease;}
+  .full-table-wrap.open{display:block;}
+  .search-box{
+    width:100%;padding:12px 16px;border-radius:12px;
+    border:1.5px solid var(--line);margin-bottom:12px;
+    font-family:'Inter',sans-serif;font-size:13.5px;
+    transition:all .25s ease;background:var(--paper);
+  }
+  .search-box:focus{outline:none;border-color:var(--kaizen1);background:#fff;box-shadow:0 0 0 4px rgba(139,47,240,.12);}
+  table.full-table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;}
+  table.full-table th{
+    text-align:left;padding:11px 12px;color:var(--muted);
+    font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;
+    border-bottom:2px solid var(--line);
+    position:sticky;top:0;background:linear-gradient(180deg,#fff,var(--paper));z-index:1;
+  }
+  table.full-table td{padding:11px 12px;border-bottom:1px solid var(--line);}
+  table.full-table tr{transition:background .2s ease;}
+  table.full-table tr:hover td{background:linear-gradient(90deg,rgba(139,47,240,.05),rgba(255,93,108,.04));}
+  .scroll-table{
+    max-height:420px;overflow-y:auto;border-radius:12px;
+    border:1px solid var(--line);
+    scrollbar-width:thin;scrollbar-color:var(--kaizen1) var(--paper);
+  }
+  .scroll-table::-webkit-scrollbar{width:8px;}
+  .scroll-table::-webkit-scrollbar-track{background:var(--paper);border-radius:8px;}
+  .scroll-table::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--kaizen1),var(--fire1));border-radius:8px;}
+
+  /* PREMIUM CORPORATE FOOTER */
+  footer{
+    margin-top:60px;
+    position:relative;
+    border-radius:28px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(124,58,237,.18), transparent 50%),
+      radial-gradient(circle at 85% 100%, rgba(236,72,153,.15), transparent 50%),
+      linear-gradient(135deg, #0d1740 0%, #1a2a6b 50%, #0d1740 100%);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:
+      0 30px 80px -20px rgba(0,0,0,.5),
+      inset 0 1px 0 rgba(255,255,255,.10);
+    color:#cbd5e1;
+    font-size:13px;line-height:1.7;
+    padding:0;
+  }
+  footer::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, transparent, #7c3aed, #ec4899, #fbbf24, #7c3aed, transparent);
+    background-size:200% 100%;
+    animation:shimmer 4s linear infinite;
+  }
+  .footer-inner{
+    padding:36px 32px 28px;
+    position:relative; z-index:1;
+  }
+  .footer-top{
+    display:grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap:32px;
+    align-items:start;
+    padding-bottom:24px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  @media(max-width:760px){
+    .footer-top{grid-template-columns:1fr;gap:24px;}
+  }
+  .footer-brand{display:flex;gap:14px;align-items:flex-start;}
+  .footer-brand-logo{
+    width:54px;height:54px;border-radius:14px;
+    background:#fff;padding:5px;flex-shrink:0;
+    box-shadow:0 8px 24px -6px rgba(0,0,0,.5), 0 0 20px rgba(124,58,237,.3);
+    object-fit:contain;
+  }
+  .footer-brand-text h4{
+    margin:0 0 4px;color:#fff;font-family:'Outfit',sans-serif;
+    font-weight:800;font-size:16px;letter-spacing:.01em;
+  }
+  .footer-brand-text p{margin:0;color:#94a3b8;font-size:12px;line-height:1.55;}
+  .footer-col h5{
+    margin:0 0 12px;color:#fff;font-size:11.5px;text-transform:uppercase;
+    letter-spacing:.18em;font-weight:800;font-family:'Outfit',sans-serif;
+    display:flex;align-items:center;gap:8px;
+  }
+  .footer-col h5::before{
+    content:""; width:4px;height:14px;border-radius:4px;
+    background:linear-gradient(180deg,#7c3aed,#ec4899);
+  }
+  .footer-stats{display:flex;flex-direction:column;gap:8px;}
+  .footer-stat{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:7px 12px;border-radius:10px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.06);
+    font-size:12px;
+    transition:all .25s ease;
+  }
+  .footer-stat:hover{background:rgba(255,255,255,.07);border-color:rgba(124,58,237,.3);}
+  .footer-stat .lbl{color:#94a3b8;}
+  .footer-stat .val{color:#fff;font-weight:700;}
+  .footer-tech{display:flex;flex-wrap:wrap;gap:6px;}
+  .footer-tech span{
+    font-size:10.5px;font-weight:600;padding:5px 11px;
+    border-radius:20px;color:#c7d2fe;
+    background:rgba(124,58,237,.12);
+    border:1px solid rgba(124,58,237,.25);
+  }
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:16px;flex-wrap:wrap;
+    padding-top:20px;
+    font-size:11.5px;color:#94a3b8;
+  }
+  .footer-bottom .copyright{display:flex;align-items:center;gap:8px;font-weight:500;}
+  .footer-bottom .copyright b{color:#e2e8f0;font-weight:700;}
+  .footer-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 12px;border-radius:20px;
+    background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(6,182,212,.10));
+    border:1px solid rgba(16,185,129,.3);
+    color:#6ee7b7;font-weight:700;font-size:10.5px;
+    letter-spacing:.06em;text-transform:uppercase;
+  }
+  .footer-badge .dot{
+    width:6px;height:6px;border-radius:50%;background:#10b981;
+    box-shadow:0 0 8px #10b981;animation:pulse 2s ease-in-out infinite;
+  }
+  footer b{color:#e2e8f0;}
+  .toast{
+    position:fixed;bottom:24px;left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:linear-gradient(135deg,var(--ink),#1a2c5a);
+    color:#fff;padding:14px 24px;border-radius:30px;
+    font-weight:600;font-size:13.5px;opacity:0;
+    transition:all .3s cubic-bezier(.4,0,.2,1);
+    pointer-events:none;z-index:999;
+    box-shadow:0 20px 50px -10px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.1);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.1);
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:sp .7s linear infinite;display:inline-block;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  #fileInput{display:none;}
+
+  /* Special second-row KPI cards override gradient accents */
+  .kpi-grid .card[style*="f0fdf4"]::before{background:linear-gradient(90deg,#22c55e,#10b981);}
+  .kpi-grid .card[style*="fdf4ff"]::before{background:linear-gradient(90deg,#a855f7,#e0249e);}
+
+  /* Subtle entrance for sections */
+  .card.progress-card{animation:fadeUp .7s ease both;animation-delay:.15s;}
+</style>
 </head>
 <body>
 
+<div class="wrap">
 
-        <div class="container">
-            <div class="header">
-                <h1>🔥 DASHBOARD SALES - KAIZEN SPIRIT 🔥</h1>
-                <p>Continuous Improvement • 改善 • Never Stop Growing</p>
-            </div>
-
-            <button class="refresh-btn" onclick="loadDashboard()">⚡ REFRESH DATA NOW</button>
-
-            <div id="loading" class="loading">⏳ Loading data...</div>
-            <div id="error" class="error" style="display: none;"></div>
-
-            <div id="dashboard" style="display: none;">
-                <!-- Kaizen Banner -->
-                <div class="kaizen-banner" id="kaizenBanner">
-                    <h2 id="kaizenTitle">💪 SEMANGAT KAIZEN!</h2>
-                    <p id="kaizenMessage">Improvement TODAY is better than perfection TOMORROW!</p>
-                </div>
-
-                <!-- Kaizen Quote -->
-                <div class="kaizen-quote">
-                    🌟 "改善 KAIZEN: Perbaikan kecil setiap hari menciptakan hasil luar biasa!" 🌟
-                </div>
-
-                <!-- Main Metrics Grid -->
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-label">🎯 TARGET SALES</div>
-                        <div class="metric-value-wrapper">
-                            <div class="metric-value" id="targetSales">Rp 0</div>
-                        </div>
-                        <div class="metric-subtitle">Target bulan ini</div>
-                    </div>
-
-                    <div class="metric-card" style="border-left-color: #7c3aed;">
-                        <div class="metric-label">💰 TOTAL SALES</div>
-                        <div class="metric-value-wrapper">
-                            <div class="metric-value" id="totalSales" style="background: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Rp 0</div>
-                        </div>
-                        <div class="metric-subtitle">Total penjualan keseluruhan</div>
-                        <span class="trend-indicator" id="totalTrend" style="background: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%); color: white;">💎 ACCUMULATING</span>
-                    </div>
-
-                    <div class="metric-card">
-                        <div class="metric-label">⚡ DAILY SALES</div>
-                        <div class="metric-value-wrapper">
-                            <div class="metric-value" id="dailySales">Rp 0</div>
-                        </div>
-                        <div class="metric-subtitle">Penjualan hari ini</div>
-                        <span class="trend-indicator trend-up" id="dailyTrend">📈 ABOVE AVERAGE</span>
-                    </div>
-
-                    <div class="metric-card">
-                        <div class="metric-label">📊 AVERAGE SALES</div>
-                        <div class="metric-value-wrapper">
-                            <div class="metric-value" id="avgSales">Rp 0</div>
-                        </div>
-                        <div class="metric-subtitle">Rata-rata per hari</div>
-                    </div>
-                </div>
-
-                <!-- Progress Card with Milestones -->
-                <div class="progress-card">
-                    <div class="progress-header">
-                        <div>
-                            <div class="metric-label">🔥 PROGRESS TO TARGET</div>
-                            <div class="progress-main-value" id="progressPercent">0%</div>
-                            <div class="metric-subtitle" id="remainingAmount">Tersisa Rp 0</div>
-                        </div>
-                        <div class="achievement-badge" id="achievementBadge">
-                            🏆 KEEP PUSHING!
-                        </div>
-                    </div>
-                    
-                    <div class="progress-bar-container">
-                        <div class="progress-fill" id="progressBar" style="width: 0%"></div>
-                    </div>
-
-                    <!-- Incentive Milestones -->
-                    <div class="incentive-grid">
-                        <div class="incentive-card" id="incentive30">
-                            <div class="incentive-icon">🥉</div>
-                            <div class="incentive-title">BRONZE</div>
-                            <div class="incentive-target">Target: 30%</div>
-                            <div class="incentive-status status-locked">🔒 LOCKED</div>
-                            <div class="incentive-mini-bar">
-                                <div class="incentive-mini-fill" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <div class="incentive-card" id="incentive50">
-                            <div class="incentive-icon">🥈</div>
-                            <div class="incentive-title">SILVER</div>
-                            <div class="incentive-target">Target: 50%</div>
-                            <div class="incentive-status status-locked">🔒 LOCKED</div>
-                            <div class="incentive-mini-bar">
-                                <div class="incentive-mini-fill" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <div class="incentive-card" id="incentive75">
-                            <div class="incentive-icon">🥇</div>
-                            <div class="incentive-title">GOLD</div>
-                            <div class="incentive-target">Target: 75%</div>
-                            <div class="incentive-status status-locked">🔒 LOCKED</div>
-                            <div class="incentive-mini-bar">
-                                <div class="incentive-mini-fill" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <div class="incentive-card" id="incentive100">
-                            <div class="incentive-icon">💎</div>
-                            <div class="incentive-title">DIAMOND</div>
-                            <div class="incentive-target">Target: 100%</div>
-                            <div class="incentive-status status-locked">🔒 LOCKED</div>
-                            <div class="incentive-mini-bar">
-                                <div class="incentive-mini-fill" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Top 10 Charts -->
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <div class="chart-title">
-                            <span>🏆</span> TOP 10 CATEGORY SALES
-                        </div>
-                        <div id="topCategories"></div>
-                    </div>
-
-                    <div class="chart-card">
-                        <div class="chart-title">
-                            <span>🏪</span> TOP 10 STORE SALES
-                        </div>
-                        <div id="topStores"></div>
-                    </div>
-                </div>
-
-                <div class="last-update">
-                    ⏰ Last updated: <span id="lastUpdate">-</span>
-                </div>
-            </div>
-        </div>
+  <div class="header">
+    <div class="brand-logo-wrap">
+      <img src="logo-alpro.png" alt="Alpro Pharmacy" class="brand-logo" onerror="this.style.display='none'">
     </div>
+    <div class="eyebrow">PT ALPRO INDONESIA GROUP</div>
+    <h1>🔥 Dashboard Sales — Kaizen Spirit 🔥</h1>
+    <p class="sub">Continuous Improvement • 改善 • Never Stop Growing</p>
+    <div class="header-meta" id="headerMeta"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="uploadBtn">⬆ Upload Excel Baru</button>
+      <button class="btn btn-ghost" id="refreshBtn">🔄 Refresh dari Sheets</button>
+      <button class="btn btn-ghost" id="resetBtn">↺ Reset Data</button>
+    </div>
+    <input type="file" id="fileInput" accept=".xlsx,.xls">
+  </div>
 
-    <script>
-        const SALES_API_URL = 'https://script.google.com/macros/s/AKfycbxVn9HabA0qNfwHTvG4dXwl3KHxAdDG6H-UkLptYLvkgpZ4YyOnG2HafvQS_ltOgdx6nQ/exec';
+  <div class="banner banner-momentum" id="momentumBanner"></div>
+  <div class="banner banner-quote">
+    <p>🌟 「改善 KAIZEN: Perbaikan kecil setiap hari menciptakan hasil luar biasa!」🌟</p>
+  </div>
 
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(amount);
-        }
+  <!-- KPI ROW 1 -->
+  <div class="section-title">📊 Ringkasan Bulan Ini <span class="tag" id="periodTag"></span></div>
+  <div class="kpi-grid">
+    <div class="card">
+      <div class="kpi-label">🎯 Target Sales Bulan Ini</div>
+      <div class="kpi-value purple" id="targetSalesVal">—</div>
+      <div class="kpi-foot" id="targetSalesNote">📡 Dari database (Config Sheet)</div>
+    </div>
+    <div class="card">
+      <div class="kpi-label">💰 Total Net Sales</div>
+      <div class="kpi-value purple" id="totalSalesVal">-</div>
+      <div class="badge badge-purple" id="achievedBadge">-</div>
+    </div>
+    <div class="card">
+      <div class="kpi-label">⚡ Rata-rata Sales / Hari</div>
+      <div class="kpi-value" id="avgDayVal">-</div>
+      <div class="kpi-foot" id="avgDayFoot">-</div>
+    </div>
+    <div class="card">
+      <div class="kpi-label">📈 GP Margin Aktual</div>
+      <div class="kpi-value" id="gpPctVal">-</div>
+      <div class="kpi-foot" id="gpFoot">-</div>
+    </div>
+  </div>
 
-        function updateKaizenMessage(progress) {
-            const banner = document.getElementById('kaizenBanner');
-            const title = document.getElementById('kaizenTitle');
-            const message = document.getElementById('kaizenMessage');
+  <!-- KPI ROW 2: days elapsed (read-only) + daily sales -->
+  <div class="kpi-grid" style="grid-template-columns:1fr 1fr;margin-top:-6px;">
+    <div class="card" style="background:#f0fdf4;border-color:#86efac;">
+      <div class="kpi-label" style="color:#166534;">⏰ Hari Berjalan</div>
+      <div class="kpi-value" style="color:#166534;" id="daysDisplay">—</div>
+      <div class="kpi-foot">Hari berjalan bulan ini (auto dari periode Excel)</div>
+    </div>
+    <div class="card" style="background:#fdf4ff;border-color:#d8b4fe;">
+      <div class="kpi-label" style="color:#7e22ce;">🔮 Proyeksi Akhir Bulan</div>
+      <div class="kpi-value" style="color:#7e22ce;" id="proyeksiVal">—</div>
+      <div class="kpi-foot" id="proyeksiFoot">Estimasi berdasarkan rata-rata harian</div>
+    </div>
+  </div>
 
-            if (progress >= 100) {
-                title.textContent = '🎊 KAIZEN ACHIEVED! TARGET TERCAPAI! 🎊';
-                message.textContent = '改善完成！EXCELLENCE! Anda telah mencapai kesempurnaan bulan ini! 🏆✨';
-            } else if (progress >= 75) {
-                title.textContent = '🔥 KAIZEN POWER! HAMPIR SAMPAI! 🔥';
-                message.textContent = `改善中！Tinggal ${(100 - progress).toFixed(1)}% lagi! PUSH HARDER, SUCCESS IS NEAR! 💪🚀`;
-            } else if (progress >= 50) {
-                title.textContent = '⚡ KAIZEN MOMENTUM! SEPARUH JALAN! ⚡';
-                message.textContent = '改善進行中！Separuh perjalanan dilalui! KEEP THE FIRE BURNING! 🌟💪';
-            } else if (progress >= 30) {
-                title.textContent = '🎯 KAIZEN START! MOMENTUM BAGUS! 🎯';
-                message.textContent = '改善開始！Great start! Terus tingkatkan dengan semangat KAIZEN! 🔥💫';
-            } else {
-                title.textContent = '🚀 SEMANGAT KAIZEN! LET\'S GO! 🚀';
-                message.textContent = '改善精神！Improvement TODAY is better than perfection TOMORROW! 💪🌟';
-            }
-        }
+  <!-- PROGRESS -->
+  <div class="section-title">🏁 Progress ke Target</div>
+  <div class="card progress-card">
+    <div class="progress-top">
+      <div>
+        <div class="progress-pct" id="progressPctText">0%</div>
+        <div class="progress-remain" id="progressRemainText">-</div>
+      </div>
+      <button class="btn btn-ghost" id="tierBadge" style="background:var(--paper);color:var(--ink);border:1px solid var(--line);">-</button>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="tier-grid" id="tierGrid"></div>
+  </div>
 
-        function updateIncentiveMilestones(progress) {
-            const milestones = [
-                { id: 'incentive30', target: 30, icon: '🥉', title: 'Bronze' },
-                { id: 'incentive50', target: 50, icon: '🥈', title: 'Silver' },
-                { id: 'incentive75', target: 75, icon: '🥇', title: 'Gold' },
-                { id: 'incentive100', target: 100, icon: '💎', title: 'Diamond' }
-            ];
+  <!-- OFFICER PERFORMANCE -->
+  <div class="section-title">👤 Performance by Officer <span class="tag">Live dari Sheets</span></div>
+  <div class="card">
+    <div class="panel-head">🏆 Ranking Officer — Net Sales & GP</div>
+    <div style="overflow-x:auto;">
+      <table class="officer-table" id="officerTable">
+        <thead>
+          <tr>
+            <th style="width:36px;">#</th>
+            <th>Officer</th>
+            <th class="r">Qty</th>
+            <th class="r">Net Sales</th>
+            <th class="r">Target</th>
+            <th class="r">Achievement</th>
+            <th class="r">GP</th>
+            <th class="r">GP%</th>
+            <th class="r">% of Total</th>
+          </tr>
+        </thead>
+        <tbody id="officerTbody">
+          <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload Excel untuk lihat data officer</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-            milestones.forEach(milestone => {
-                const card = document.getElementById(milestone.id);
-                const statusEl = card.querySelector('.incentive-status');
-                const fillEl = card.querySelector('.incentive-mini-fill');
+  <!-- TOP STORES -->
+  <div class="section-title">🏪 Top Stores</div>
+  <div class="card">
+    <div class="panel-head">🏪 Top <span id="storeCount">10</span> Store — Net Sales</div>
+    <div id="storeList"></div>
+    <button class="table-toggle" id="toggleAllStores">Lihat Semua Toko ▾</button>
+    <div class="full-table-wrap" id="fullStoreWrap">
+      <input class="search-box" id="storeSearch" placeholder="Cari nama toko...">
+      <div class="scroll-table">
+        <table class="full-table">
+          <thead><tr><th>#</th><th>Toko</th><th style="text-align:right;">Net Sales</th><th style="text-align:right;">Qty</th><th style="text-align:right;">GP</th></tr></thead>
+          <tbody id="fullStoreBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-                if (progress >= milestone.target) {
-                    card.classList.remove('active');
-                    card.classList.add('achieved');
-                    statusEl.textContent = '✅ ACHIEVED!';
-                    statusEl.className = 'incentive-status status-achieved';
-                    fillEl.style.width = '100%';
-                } else if (progress >= (milestones[milestones.indexOf(milestone) - 1]?.target || 0)) {
-                    card.classList.add('active');
-                    card.classList.remove('achieved');
-                    statusEl.textContent = `🔥 ${progress.toFixed(1)}%`;
-                    statusEl.className = 'incentive-status status-progress';
-                    const prevTarget = milestones[milestones.indexOf(milestone) - 1]?.target || 0;
-                    const rangeProgress = ((progress - prevTarget) / (milestone.target - prevTarget)) * 100;
-                    fillEl.style.width = Math.min(rangeProgress, 100) + '%';
-                } else {
-                    card.classList.remove('active', 'achieved');
-                    statusEl.textContent = '🔒 LOCKED';
-                    statusEl.className = 'incentive-status status-locked';
-                    fillEl.style.width = '0%';
-                }
-            });
-        }
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="logo-alpro.png" alt="Alpro" class="footer-brand-logo" onerror="this.style.display='none'">
+          <div class="footer-brand-text">
+            <h4>PT Alpro Indonesia Group</h4>
+            <p>Sales Performance Intelligence Dashboard<br>Powered by Kaizen Spirit — 改善</p>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Status Sistem</h5>
+          <div class="footer-stats" id="footerStats">
+            <div class="footer-stat"><span class="lbl">Holding</span><span class="val" id="fHolding">-</span></div>
+            <div class="footer-stat"><span class="lbl">Toko Aktif</span><span class="val" id="fStores">-</span></div>
+            <div class="footer-stat"><span class="lbl">Officer Aktif</span><span class="val" id="fOfficers">-</span></div>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Data &amp; Keamanan</h5>
+          <div class="footer-tech">
+            <span>🔒 Local Processing</span>
+            <span>📊 Excel Engine</span>
+            <span>☁ Google Sheets Sync</span>
+            <span>🛡 Confidential</span>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:#94a3b8;line-height:1.6;">
+            Seluruh data diproses secara lokal di browser Anda. Tidak ada data yang dikirim ke server eksternal.
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="copyright">
+          © <span id="fYear"></span> <b>PT Alpro Indonesia Group</b> • All Rights Reserved
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <span class="footer-badge"><span class="dot"></span> Sistem Aktif</span>
+          <span style="color:#64748b;font-size:11px;">v2.0 • Internal Use Only</span>
+        </div>
+      </div>
+      <!-- Hidden legacy footer node retained for backward compatibility -->
+      <div id="footerNote" style="display:none;"></div>
+    </div>
+  </footer>
 
-        function updateAchievementBadge(progress) {
-            const badge = document.getElementById('achievementBadge');
+</div>
 
-            if (progress >= 100) {
-                badge.textContent = '💎 KAIZEN MASTER!';
-                badge.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)';
-            } else if (progress >= 75) {
-                badge.textContent = '🥇 GOLD WARRIOR!';
-                badge.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
-            } else if (progress >= 50) {
-                badge.textContent = '🥈 SILVER FIGHTER!';
-                badge.style.background = 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)';
-            } else if (progress >= 30) {
-                badge.textContent = '🥉 BRONZE STARTER!';
-                badge.style.background = 'linear-gradient(135deg, #d97706 0%, #b45309 100%)';
-            } else {
-                badge.textContent = '🏆 KEEP PUSHING!';
-                badge.style.background = 'linear-gradient(135deg, #f59e0b 0%, #dc2626 100%)';
-            }
-        }
+<div class="toast" id="toast"></div>
 
-        function createTopItem(item, rank, maxValue) {
-            const percentage = (item.total / maxValue * 100).toFixed(1);
-            return `
-                <div class="top-item">
-                    <span class="top-item-rank">#${rank}</span>
-                    <div class="top-item-content">
-                        <div class="top-item-name">${item.name}</div>
-                        <div class="top-item-bar">
-                            <div class="top-item-bar-fill" style="width: ${percentage}%"></div>
-                        </div>
-                    </div>
-                    <span class="top-item-value">${formatCurrency(item.total)}</span>
-                </div>
-            `;
-        }
+<script>
+// ============================================================
+// KONFIGURASI
+// ============================================================
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyWUYxAeciev2wMTAR9K_cl6hcit3981efNjcT22LYdCdCGWesCrhygO1VWk9Mu_d2U/exec';
 
-        function createCategoryVsTargetItem(item, rank) {
-            const sales = Number(item.sales ?? item.total ?? 0);
-            const target = Number(item.target ?? 0);
-            const achievementPercent = target > 0
-                ? Number(item.achievementPercent ?? ((sales / target) * 100))
-                : 0;
-            const progressWidth = target > 0 ? Math.min(achievementPercent, 100) : 0;
-            const isTargetReached = target > 0 ? sales >= target : false;
-            const difference = sales - target;
+const EXCLUDED_OFFICERS = ['ZHAFRAN VIRZALDI YULMAN', 'RUPA LESTY'];
+const EXCLUDED_GROUPS   = ['NON MERCHANDISE'];
 
-            let diffText = 'Target belum diatur';
-            let diffClass = 'category-target-diff';
+// ============================================================
+// DEFAULT DATA
+// ============================================================
+const DEFAULT_DATA = {"meta":{"period_start":"2026-06-01","period_end":"2026-06-16","days_elapsed":16,"days_in_month":30,"printed_date":"2026-06-17","holding":"ALP-ALPRO INDONESIA GROUP","total_stores":214},"totals":{"net_sales":42414273381.5,"gross_sales":42800543207.94,"gp":10920773656.78,"gp_pct":25.7479,"qty":704600.0},"stores":[{"code":"0020","name":"APOTEK ALPRO GEDUNG HIJAU","sales":446918206.65,"qty":4556.9,"gp":97436889.42},{"code":"0021","name":"APOTEK ALPRO OLYMPIC CIKARANG","sales":308087583.46,"qty":3019.0,"gp":71311877.49},{"code":"0083","name":"APOTEK ALPRO TEBET MAS INDAH","sales":236344191.14,"qty":2748.2,"gp":54829227.82},{"code":"0070","name":"APOTEK ALPRO SABANG","sales":231535160.78,"qty":3181.3,"gp":56237387.78},{"code":"0005","name":"APOTEK ALPRO GOLDEN VIENNA","sales":226227229.47,"qty":3215.3,"gp":57055193.42},{"code":"0001","name":"APOTEK ALPRO TEBET TIMUR","sales":224970754.28,"qty":2632.7,"gp":53472444.58},{"code":"0077","name":"APOTEK ALPRO CITRAGRAND CIBUBUR","sales":207851380.64,"qty":2512.9,"gp":47711113.08},{"code":"0062","name":"APOTEK ALPRO KEMANG PRATAMA","sales":204218950.39,"qty":2430.2,"gp":49543852.79},{"code":"0007","name":"APOTEK ALPRO SUNTER KEMAYORAN","sales":193729364.79,"qty":2164.7,"gp":43101660.86},{"code":"0002","name":"APOTEK ALPRO VETERAN RAYA","sales":193068484.05,"qty":2646.2,"gp":48392604.89}],"officers":[{"name":"ARISYANTI PRIMA NUGRAHESTI","sales":8205568899.59,"qty":67328.3,"gp":1820636381.77,"gp_pct":22.19},{"name":"PUTRI JEANE","sales":5601429519.76,"qty":39455.5,"gp":1457638789.45,"gp_pct":26.02},{"name":"HARFIANA ASHARI","sales":4245172668.63,"qty":91854.8,"gp":955929948.66,"gp_pct":22.52},{"name":"INDRA RESSY OCTAVIANI","sales":2184382884.92,"qty":50751.3,"gp":1066726860.13,"gp_pct":48.83},{"name":"OKTAVIA FAJAR INAYAH","sales":1071092880.23,"qty":28104.9,"gp":259974144.93,"gp_pct":24.27}],"appscript":{"targetSales":0,"totalSales":0,"averageSales":0,"progressPercent":0,"remainingToTarget":0,"lastUpdate":"-"}};
 
-            if (target > 0 && isTargetReached) {
-                diffText = `+${formatCurrency(Math.abs(difference))} di atas target`;
-            } else if (target > 0) {
-                diffText = `${formatCurrency(Math.abs(difference))} menuju target`;
-                diffClass = 'category-target-diff need-push';
-            }
+const DEFAULT_SETTINGS = { fixedCost: 0, days: DEFAULT_DATA.meta.days_elapsed };
 
-            return `
-                <div class="top-item">
-                    <span class="top-item-rank">#${rank}</span>
-                    <div class="top-item-content">
-                        <div class="top-item-name">${item.name}</div>
-                        <div class="top-item-bar category-vs-target-bar">
-                            <div class="top-item-bar-fill" style="width: ${progressWidth}%"></div>
-                            ${target > 0 ? '<div class="category-target-marker"></div><div class="category-target-label">Target</div>' : ''}
-                        </div>
-                        <div class="category-vs-target-meta">
-                            <span>Sales: ${formatCurrency(sales)}</span>
-                            <span>Target: ${target > 0 ? formatCurrency(target) : '-'}</span>
-                            <span class="category-vs-target-badge ${isTargetReached ? 'achieved' : ''}">${target > 0 ? achievementPercent.toFixed(1) + '%' : 'No Target'}</span>
-                        </div>
-                        <div class="${diffClass}">${diffText}</div>
-                    </div>
-                    <span class="top-item-value">${formatCurrency(sales)}</span>
-                </div>
-            `;
-        }
+let DATA     = JSON.parse(JSON.stringify(DEFAULT_DATA));
+let SETTINGS = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+let GAS_DATA = null;
 
-        async function loadDashboard() {
-            try {
-                document.getElementById('loading').style.display = 'block';
-                document.getElementById('error').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'none';
+// ============================================================
+// HELPERS
+// ============================================================
+function fmtRp(n){
+  if(n===null||n===undefined||isNaN(n)) return 'Rp 0';
+  const neg=n<0; n=Math.abs(n);
+  let s='Rp '+Math.round(n).toLocaleString('id-ID');
+  return neg?'-'+s:s;
+}
+function fmtNum(n){ return Math.round(n).toLocaleString('id-ID'); }
+function fmtPct(n){ return n.toFixed(1)+'%'; }
+function showToast(msg,dur=2600){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
+function isExcludedOfficer(name){
+  return EXCLUDED_OFFICERS.some(e=>String(name||'').toUpperCase().trim()===e.toUpperCase());
+}
+function isExcludedGroup(name){
+  return EXCLUDED_GROUPS.some(e=>String(name||'').toUpperCase().trim().startsWith(e.toUpperCase()));
+}
 
-                const response = await fetch(SALES_API_URL);
-                if (!response.ok) throw new Error('Failed to fetch data');
-                
-                const data = await response.json();
+// ============================================================
+// PERSIST
+// ============================================================
+async function loadPersisted(){
+  try{ const s=await window.storage.get('settings_v3'); if(s&&s.value) SETTINGS=Object.assign({},DEFAULT_SETTINGS,JSON.parse(s.value)); }catch(e){}
+  try{ const d=await window.storage.get('dataset_v3'); if(d&&d.value) DATA=JSON.parse(d.value); }catch(e){}
+  await fetchAppScriptData();
+}
+async function saveSettings(){ try{ await window.storage.set('settings_v3',JSON.stringify(SETTINGS)); }catch(e){} }
+async function saveDataset(){  try{ await window.storage.set('dataset_v3', JSON.stringify(DATA));     }catch(e){} }
 
-                document.getElementById('targetSales').textContent = formatCurrency(data.targetSales);
-                document.getElementById('dailySales').textContent = formatCurrency(data.dailySales);
-                document.getElementById('avgSales').textContent = formatCurrency(data.averageSales);
-                document.getElementById('totalSales').textContent = formatCurrency(data.totalSales);
+// ============================================================
+// FETCH DARI APPSCRIPT
+// ============================================================
+async function fetchAppScriptData(){
+  if(!GAS_URL||GAS_URL.includes('ISI_URL')){ render(); return; }
+  showToast('🔄 Mengambil data dari Google Sheets...', 5000);
+  try{
+    const res  = await fetch(GAS_URL);
+    const json = await res.json();
+    if(json.success){
+      GAS_DATA = json;
+      try{ await window.storage.set('gas_cache',JSON.stringify(json)); }catch(e){}
+      applyGasData(json);
+      showToast('✅ Data live dari Google Sheets dimuat');
+    } else throw new Error(json.error||'AppScript error');
+  }catch(err){
+    console.warn('GAS fetch gagal:', err);
+    try{
+      const cached=await window.storage.get('gas_cache');
+      if(cached&&cached.value){ GAS_DATA=JSON.parse(cached.value); applyGasData(GAS_DATA); showToast('⚠️ Pakai cache (AppScript tidak terjangkau)'); }
+      else { showToast('⚠️ AppScript tidak terjangkau'); }
+    }catch(e){}
+  }
+  render();
+}
 
-                const totalTrendEl = document.getElementById('totalTrend');
-                if (data.totalSales >= data.targetSales) {
-                    totalTrendEl.textContent = '🏆 TARGET ACHIEVED!';
-                    totalTrendEl.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
-                } else {
-                    const achievedPercent = ((data.totalSales / data.targetSales) * 100).toFixed(1);
-                    totalTrendEl.textContent = `💎 ${achievedPercent}% ACHIEVED`;
-                    totalTrendEl.style.background = 'linear-gradient(135deg, #7c3aed 0%, #c026d3 100%)';
-                }
+function applyGasData(gas){
+  if(!gas) return;
+  DATA.appscript = {
+    targetSales:       gas.targetSales       || 0,
+    totalSales:        gas.totalSales        || 0,
+    averageSales:      gas.averageSales      || 0,
+    dailySales:        gas.dailySales        || 0,
+    progressPercent:   gas.progressPercent   || 0,
+    remainingToTarget: gas.remainingToTarget || 0,
+    lastUpdate:        gas.lastUpdate        || '-'
+  };
 
-                document.getElementById('progressPercent').textContent = data.progressPercent.toFixed(1) + '%';
-                document.getElementById('remainingAmount').textContent = 
-                    'Tersisa ' + formatCurrency(data.remainingToTarget);
+  // Build target map dari officerTargets (sheet TargetOfficer)
+  const targetMap = {};
+  if(gas.officerTargets && gas.officerTargets.length > 0){
+    gas.officerTargets.forEach(t => {
+      targetMap[String(t.name).toUpperCase().trim()] = t.target;
+    });
+  }
 
-                const dailyTrend = document.getElementById('dailyTrend');
-                if (data.dailySales > data.averageSales) {
-                    dailyTrend.className = 'trend-indicator trend-up';
-                    dailyTrend.textContent = '📈 ABOVE AVERAGE';
-                } else {
-                    dailyTrend.className = 'trend-indicator trend-down';
-                    dailyTrend.textContent = '📉 BELOW AVERAGE';
-                }
+  // Update officer list dari Sheets kalau ada, merge dengan target per officer
+  if(gas.officers && gas.officers.length > 0){
+    DATA.officers = gas.officers
+      .filter(o => !isExcludedOfficer(o.name))
+      .map(o => ({
+        ...o,
+        target: targetMap[String(o.name).toUpperCase().trim()] || 0
+      }));
+  } else if(DATA.officers && DATA.officers.length > 0 && Object.keys(targetMap).length > 0){
+    // Sheets tidak kirim officers, tapi ada targetMap — merge ke data lokal dari Excel
+    DATA.officers = DATA.officers.map(o => ({
+      ...o,
+      target: targetMap[String(o.name).toUpperCase().trim()] || o.target || 0
+    }));
+  }
+}
 
-                const progressBar = document.getElementById('progressBar');
-                progressBar.style.width = Math.min(data.progressPercent, 100) + '%';
+// ============================================================
+// RENDER
+// ============================================================
+function render(){
+  const gas     = DATA.appscript || {};
+  const hasGas  = gas.targetSales > 0;
+  const target  = gas.targetSales || 0;
+  const total   = (gas.totalSales > 0) ? gas.totalSales : DATA.totals.net_sales;
+  const days    = Number(DATA.meta.days_elapsed) || 1;
+  const avgDay  = (gas.averageSales > 0) ? gas.averageSales : total / days;
+  const achieved= target > 0 ? (total / target * 100) : 0;
 
-                updateKaizenMessage(data.progressPercent);
-                updateIncentiveMilestones(data.progressPercent);
-                updateAchievementBadge(data.progressPercent);
+  // Header
+  document.getElementById('periodTag').textContent =
+    DATA.meta.period_start + ' s/d ' + DATA.meta.period_end + ' • ' + DATA.meta.total_stores + ' toko';
+  document.getElementById('headerMeta').innerHTML =
+    `<span>📅 Periode: ${DATA.meta.period_start} – ${DATA.meta.period_end}</span>
+     <span>🏪 ${DATA.meta.total_stores} Toko Aktif</span>
+     <span>🕐 Diperbarui: ${gas.lastUpdate ? gas.lastUpdate.slice(0,10) : DATA.meta.printed_date}</span>`;
 
-                document.getElementById('topCategories').innerHTML = 
-                    data.topCategories.map((item, index) => 
-                        createCategoryVsTargetItem(item, index + 1)
-                    ).join('');
+  // KPI
+  document.getElementById('targetSalesVal').textContent  = target > 0 ? fmtRp(target) : '—';
+  document.getElementById('targetSalesNote').textContent = hasGas
+    ? '📡 Dari database (Config Sheet)'
+    : '⚠ Deploy ulang AppScript & Refresh';
+  document.getElementById('totalSalesVal').textContent   = fmtRp(total);
+  document.getElementById('achievedBadge').textContent   = target > 0
+    ? (fmtPct(achieved) + ' ACHIEVED')
+    : (GAS_DATA ? '⚠ Set target di Config!B1' : '⚠ Refresh dari Sheets');
+  document.getElementById('achievedBadge').className     = 'badge ' + (achieved >= 100 ? 'badge-green' : achieved >= 75 ? 'badge-purple' : 'badge-red');
 
-                const maxStore = data.topStores[0]?.total || 1;
-                document.getElementById('topStores').innerHTML = 
-                    data.topStores.map((item, index) => 
-                        createTopItem(item, index + 1, maxStore)
-                    ).join('');
+  document.getElementById('avgDayVal').textContent  = fmtRp(avgDay);
+  document.getElementById('avgDayFoot').textContent = `Rata-rata per hari berjalan (${days} hari)`;
 
-                const now = new Date();
-                document.getElementById('lastUpdate').textContent = now.toLocaleString('id-ID');
+  document.getElementById('gpPctVal').textContent = fmtPct(DATA.totals.gp_pct || 0);
+  document.getElementById('gpFoot').textContent   = `GP Rp ${fmtNum(DATA.totals.gp)} dari Net Sales`;
 
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
+  // Days & Proyeksi Akhir Bulan
+  document.getElementById('daysDisplay').textContent = days + ' hari';
 
-            } catch (error) {
-                console.error('Error loading dashboard:', error);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('error').style.display = 'block';
-                document.getElementById('error').textContent = 
-                    '⚠️ Error loading data: ' + error.message + '. Pastikan API URL sudah benar!';
-            }
-        }
+  // Hitung total hari dalam bulan dari period_end
+  let totalDaysMonth = 30;
+  const periodEnd = DATA.meta.period_end || '';
+  if(periodEnd){
+    const d = new Date(periodEnd.slice(0,4), parseInt(periodEnd.slice(5,7)), 0);
+    if(!isNaN(d.getTime())) totalDaysMonth = d.getDate();
+  }
 
-        // Auto-load on page load
-        window.addEventListener('load', loadDashboard);
-    </script>
+  // Proyeksi = rata-rata harian × total hari bulan
+  const proyeksi = avgDay * totalDaysMonth;
+  document.getElementById('proyeksiVal').textContent = fmtRp(proyeksi);
+  if(target > 0){
+    const selisih = proyeksi - target;
+    if(selisih >= 0){
+      document.getElementById('proyeksiFoot').innerHTML =
+        `✅ <b style="color:#0f8a52;">On track!</b> Proyeksi <b>+${fmtRp(selisih)}</b> di atas target`;
+    } else {
+      document.getElementById('proyeksiFoot').innerHTML =
+        `⚠️ <b style="color:#d6304a;">Kurang ${fmtRp(Math.abs(selisih))}</b> dari target`;
+    }
+  } else {
+    document.getElementById('proyeksiFoot').textContent = `Proyeksi ${totalDaysMonth} hari | avg ${fmtRp(avgDay)}/hari`;
+  }
+
+  // === MOMENTUM BANNER ===
+  const mb = document.getElementById('momentumBanner');
+  let mT, mS;
+  if(target<=0){      mT='🎯 SET TARGET DI CONFIG SHEET!'; mS='Target belum ada di database. Set dulu di Config Sheet B1.'; }
+  else if(achieved<30){ mT='🚀 AYO TANCAP GAS!'; mS='Ganbatte! 頑張って Momentum awal penting, terus dorong penjualan harian.'; }
+  else if(achieved<50){ mT='🎯 KAIZEN START! MOMENTUM BAGUS!'; mS='改善開始！Great start! Terus tingkatkan dengan semangat KAIZEN!'; }
+  else if(achieved<75){ mT='🥈 SILVER ZONE! TERUS MELAJU!'; mS='銀の勢い！Setengah jalan, push terus ke Gold tier!'; }
+  else if(achieved<100){mT='🥇 GOLD ZONE! DIKIT LAGI DIAMOND!'; mS='金のラストスパート！Sedikit lagi mencapai target penuh!'; }
+  else {                mT='💎 DIAMOND ACHIEVED! TARGET TERCAPAI!'; mS='ダイヤモンド達成！Luar biasa, pertahankan momentum ini!'; }
+  mb.innerHTML=`<h3>🎯 ${mT} 🎯</h3><p>${mS}</p>`;
+
+  // === PROGRESS + TIERS ===
+  document.getElementById('progressPctText').textContent = fmtPct(Math.max(0,achieved));
+  document.getElementById('progressRemainText').textContent = target > 0
+    ? `Tersisa ${fmtRp(Math.max(0, gas.remainingToTarget || target-total))}`
+    : 'Target belum ada di database';
+  document.getElementById('progressFill').style.width = Math.min(100,Math.max(0,achieved))+'%';
+
+  const tiers=[{label:'BRONZE',medal:'🥉',pct:30},{label:'SILVER',medal:'🥈',pct:50},{label:'GOLD',medal:'🥇',pct:75},{label:'DIAMOND',medal:'💎',pct:100}];
+  let currentTier='BELUM MULAI';
+  document.getElementById('tierGrid').innerHTML=tiers.map((t,i)=>{
+    const ok=achieved>=t.pct;
+    const isEdge=ok&&(i===tiers.length-1||achieved<tiers[i+1].pct);
+    if(ok) currentTier=t.label;
+    const cls=ok?(isEdge?'tier active current':'tier active'):'tier locked';
+    const state=ok?'✅ ACHIEVED!':`🔒 ${fmtPct(Math.min(100,achieved))}`;
+    return `<div class="${cls}"><div class="medal">${t.medal}</div><div class="tname">${t.label}</div><div class="ttarget">Target: ${t.pct}%</div><div class="tstate">${state}</div></div>`;
+  }).join('');
+  document.getElementById('tierBadge').textContent='🏅 '+currentTier;
+
+  // === OFFICER TABLE ===
+  renderOfficerTable();
+
+  // === TOP STORES ===
+  const stores  = DATA.stores || [];
+  const top10   = stores.slice(0,10);
+  document.getElementById('storeCount').textContent = Math.min(10, stores.length);
+  const maxSt   = Math.max(...top10.map(s=>s.sales), 1);
+  document.getElementById('storeList').innerHTML = top10.map((s,i)=>{
+    const bp = Math.min(100,(s.sales/maxSt*100));
+    const rc = i===0?'r1':i===1?'r2':i===2?'r3':'';
+    return `<div class="row-item">
+      <div class="row-top">
+        <div class="rank ${rc}">#${i+1}</div>
+        <div class="name-block"><div class="nm">${s.name}</div><div class="meta-line">Kode ${s.code} • Qty ${fmtNum(s.qty)}</div></div>
+        <div class="val">${fmtRp(s.sales)}</div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${bp}%;background:linear-gradient(90deg,#7b2ff7,#ff5d6c);"></div></div>
+    </div>`;
+  }).join('');
+
+  renderFullStoreTable('');
+
+  // Footer
+  const excl = DATA.officers ? DATA.officers.filter(o=>!isExcludedOfficer(o.name)) : [];
+  document.getElementById('footerNote').innerHTML =
+    `<b>${DATA.meta.holding}</b> • ${stores.length} toko • ${excl.length} officer aktif • Exclude: ${EXCLUDED_OFFICERS.join(', ')}`;
+  // Premium footer stats
+  const fH = document.getElementById('fHolding');
+  const fS = document.getElementById('fStores');
+  const fO = document.getElementById('fOfficers');
+  const fY = document.getElementById('fYear');
+  if(fH) fH.textContent = DATA.meta.holding || '-';
+  if(fS) fS.textContent = stores.length + ' toko';
+  if(fO) fO.textContent = excl.length + ' officer';
+  if(fY) fY.textContent = new Date().getFullYear();
+}
+
+function renderOfficerTable(){
+  const officers = (DATA.officers || []).filter(o => !isExcludedOfficer(o.name));
+  const tbody    = document.getElementById('officerTbody');
+  if(!officers.length){
+    tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px;">Upload Excel untuk lihat data officer</td></tr>';
+    return;
+  }
+  const totalSales = officers.reduce((s,o)=>s+(o.sales||o.net_sales||0), 0);
+  const sorted     = [...officers].sort((a,b)=>(b.sales||b.net_sales||0)-(a.sales||a.net_sales||0));
+  tbody.innerHTML   = sorted.map((o, i)=>{
+    const ns    = o.sales || o.net_sales || 0;
+    const gp    = o.gp || 0;
+    const gpPct = o.gp_pct || (ns>0 ? gp/ns*100 : 0);
+    const qty   = o.qty || 0;
+    const share = totalSales > 0 ? (ns/totalSales*100) : 0;
+    const tgt   = o.target || 0;
+    const ach   = tgt > 0 ? (ns/tgt*100) : 0;
+    const achCls= tgt<=0 ? 'pill-amber' : ach>=100 ? 'pill-green' : ach>=75 ? 'pill-amber' : 'pill-red';
+    const achTxt= tgt<=0 ? '—' : fmtPct(ach);
+    const rc    = i===0?'r1':i===1?'r2':i===2?'r3':'';
+    const gpCls = gpPct>=30?'pill-green':gpPct>=20?'pill-amber':'pill-red';
+    return `<tr>
+      <td><span class="rank-badge ${rc}">${i+1}</span></td>
+      <td style="font-weight:700;">${o.name}</td>
+      <td class="r">${fmtNum(qty)}</td>
+      <td class="r">${fmtRp(ns)}</td>
+      <td class="r" style="color:var(--muted);">${tgt > 0 ? fmtRp(tgt) : '—'}</td>
+      <td class="r"><span class="pct-pill ${achCls}">${achTxt}</span></td>
+      <td class="r">${fmtRp(gp)}</td>
+      <td class="r"><span class="pct-pill ${gpCls}">${fmtPct(gpPct)}</span></td>
+      <td class="r"><span class="pct-pill pill-amber">${fmtPct(share)}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderFullStoreTable(filter){
+  const body = document.getElementById('fullStoreBody');
+  const f    = (filter||'').toLowerCase();
+  const rows = (DATA.stores||[]).filter(s=>s.name.toLowerCase().includes(f));
+  body.innerHTML = rows.map((s,i)=>
+    `<tr><td>${i+1}</td><td>${s.name}</td><td style="text-align:right;">${fmtRp(s.sales)}</td><td style="text-align:right;">${fmtNum(s.qty)}</td><td style="text-align:right;">${fmtRp(s.gp||0)}</td></tr>`
+  ).join('');
+}
+
+// ============================================================
+// EVENTS
+// ============================================================
+document.getElementById('toggleAllStores').addEventListener('click', e=>{
+  const w=document.getElementById('fullStoreWrap');
+  w.classList.toggle('open');
+  e.target.textContent=w.classList.contains('open')?'Tutup Daftar ▴':'Lihat Semua Toko ▾';
+});
+document.getElementById('storeSearch').addEventListener('input', e=>renderFullStoreTable(e.target.value));
+document.getElementById('refreshBtn').addEventListener('click', async ()=>{ await fetchAppScriptData(); });
+document.getElementById('resetBtn').addEventListener('click', async ()=>{
+  DATA=JSON.parse(JSON.stringify(DEFAULT_DATA));
+  SETTINGS=JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  await saveSettings(); await saveDataset(); await fetchAppScriptData();
+  showToast('🔄 Data direset');
+});
+
+// ============================================================
+// UPLOAD EXCEL → Agregasi by Officer → Push ringkasan ke Sheets
+// ============================================================
+document.getElementById('uploadBtn').addEventListener('click', ()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  showToast('⏳ Membaca Excel...', 10000);
+  try{
+    const buf  = await file.arrayBuffer();
+    const wb   = XLSX.read(buf, {type:'array'});
+    const ws   = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
+
+    // Cari baris header
+    let headerIdx=-1, colMap={};
+    for(let i=0;i<Math.min(rows.length,30);i++){
+      const r=rows[i].map(c=>(c===null||c===undefined)?'':String(c).trim());
+      if(r.includes('Store Name')&&r.includes('Net Sales')){
+        headerIdx=i; r.forEach((n,j)=>{ if(n) colMap[n]=j; }); break;
+      }
+    }
+    if(headerIdx===-1){ showToast('❌ Format tidak dikenali — perlu kolom Store Name & Net Sales'); return; }
+
+    // Baca periode
+    let periodStart='-', periodEnd='-', printedDate=new Date().toISOString().slice(0,10);
+    for(let i=0;i<headerIdx;i++){
+      const r0=rows[i][0], r1=rows[i][1];
+      if(r0&&String(r0).toLowerCase().includes('sales date')){
+        const parts=String(r1).split(' to ');
+        if(parts.length===2){ periodStart=parts[0].trim().slice(0,10); periodEnd=parts[1].trim().slice(0,10); }
+      }
+      if(r0&&String(r0).toLowerCase().includes('printed date')&&r1) printedDate=String(r1).slice(0,10);
+    }
+
+    // Validasi kolom
+    const need=['Store','Store Name','Division','Officer','Quantity Sold','Net Sales','GP'];
+    for(const n of need){ if(!(n in colMap)){ showToast(`❌ Kolom "${n}" tidak ditemukan`); return; } }
+
+    // Agregasi by officer + store
+    const offMap={}, storeMap={};
+    let totalNet=0, totalGross=0, totalGP=0, totalQty=0;
+
+    for(let i=headerIdx+1;i<rows.length;i++){
+      const r=rows[i];
+      if(!r||r.length===0) continue;
+      const storeName=r[colMap['Store Name']]; if(!storeName) continue;
+      const officer =String(r[colMap['Officer']]||'').trim();
+      const division=String(r[colMap['Division']]||'').trim();
+      if(isExcludedOfficer(officer)) continue;
+      if(division&&isExcludedGroup(division)) continue;
+
+      const store=String(r[colMap['Store']]||'').trim();
+      const ns   =Number(r[colMap['Net Sales']])||0;
+      const qty  =Number(r[colMap['Quantity Sold']])||0;
+      const gp   =Number(r[colMap['GP']])||0;
+      const gs   =colMap['Gross Sales']!==undefined?(Number(r[colMap['Gross Sales']])||0):ns;
+
+      totalNet+=ns; totalGross+=gs; totalGP+=gp; totalQty+=qty;
+
+      // Agregasi officer
+      if(officer){
+        if(!offMap[officer]) offMap[officer]={name:officer,qty:0,net_sales:0,gp:0};
+        offMap[officer].qty+=qty; offMap[officer].net_sales+=ns; offMap[officer].gp+=gp;
+      }
+      // Agregasi store
+      const sKey=String(storeName).trim();
+      if(!storeMap[sKey]) storeMap[sKey]={code:store,name:sKey,sales:0,qty:0,gp:0};
+      storeMap[sKey].sales+=ns; storeMap[sKey].qty+=qty; storeMap[sKey].gp+=gp;
+    }
+
+    const officers = Object.values(offMap).map(o=>({
+      ...o, gp_pct: o.net_sales>0?(o.gp/o.net_sales*100):0
+    })).sort((a,b)=>b.net_sales-a.net_sales);
+
+    const stores = Object.values(storeMap).sort((a,b)=>b.sales-a.sales);
+
+    let daysElapsed=SETTINGS.days;
+    if(periodStart!=='-'&&periodEnd!=='-'){
+      const diff=Math.round((new Date(periodEnd)-new Date(periodStart))/86400000)+1;
+      if(diff>0&&diff<32) daysElapsed=diff;
+    }
+
+    // Update DATA lokal
+    DATA = {
+      meta:{ period_start:periodStart, period_end:periodEnd, days_elapsed:daysElapsed,
+             days_in_month:30, printed_date:printedDate, holding:DEFAULT_DATA.meta.holding,
+             total_stores:stores.length },
+      totals:{ net_sales:totalNet, gross_sales:totalGross, gp:totalGP,
+               gp_pct:totalNet>0?(totalGP/totalNet*100):0, qty:totalQty },
+      stores, officers,
+      appscript: DATA.appscript
+    };
+    SETTINGS.days = daysElapsed;
+    await saveDataset(); await saveSettings();
+    render();
+
+    // ── PUSH ke Google Sheets — hanya summary by officer (~5-10 baris!) ──
+    if(GAS_URL&&!GAS_URL.includes('ISI_URL')&&officers.length>0){
+      showToast(`⏳ Menyimpan ${officers.length} officer ke Sheets...`, 8000);
+      try{
+        const payload = {
+          period_start: periodStart,
+          period_end:   periodEnd,
+          days_elapsed: daysElapsed,
+          total_net_sales: totalNet,
+          total_gp:        totalGP,
+          gp_pct:          totalNet>0?(totalGP/totalNet*100):0,
+          officers: officers.map(o=>({
+            name:      o.name,
+            qty:       o.qty,
+            net_sales: o.net_sales,
+            gp:        o.gp,
+            gp_pct:    o.gp_pct
+          }))
+        };
+        const res  = await fetch(GAS_URL, {
+          method:'POST',
+          headers:{'Content-Type':'text/plain'},
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if(!json.success) throw new Error(json.error||'AppScript error');
+        // Ambil summary terbaru dari AppScript (target dll)
+        if(json.summary){ applyGasData(json.summary); render(); }
+        showToast(`✅ Selesai! ${officers.length} officer tersimpan ke Sheets & dashboard diperbarui.`);
+      }catch(pushErr){
+        console.error('Push gagal:',pushErr);
+        showToast(`⚠️ Dashboard OK, gagal push ke Sheets: ${pushErr.message}`);
+      }
+    } else {
+      showToast(`✅ Dashboard diperbarui! ${stores.length} toko, ${officers.length} officer.`);
+    }
+  }catch(err){
+    console.error(err);
+    showToast('❌ Gagal proses Excel: '+err.message);
+  }
+  e.target.value='';
+});
+
+// ============================================================
+// INIT
+// ============================================================
+// Set copyright year early
+(function(){
+  var fY = document.getElementById('fYear');
+  if(fY) fY.textContent = new Date().getFullYear();
+})();
+loadPersisted();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
