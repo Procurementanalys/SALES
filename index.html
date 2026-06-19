@@ -57,7 +57,9 @@
       radial-gradient(ellipse 70% 80% at 50% 110%, rgba(6,182,212,.15), transparent 60%),
       radial-gradient(ellipse 60% 50% at 50% 50%, rgba(30,58,138,.18), transparent 70%),
       var(--navy-deep);
+    background-attachment: fixed;
     min-height:100vh;
+    width:100%;
     overflow-x:hidden;
     position:relative;
   }
@@ -85,7 +87,22 @@
     0%{background-position:0 0, 0 0, 0 0;}
     100%{background-position:600px 600px, -800px 800px, 500px -500px;}
   }
-  .wrap{max-width:1280px;margin:0 auto;padding:28px 20px 60px;position:relative;z-index:1;}
+  /* FULL-WIDTH RESPONSIVE WRAPPER — menyesuaikan lebar browser */
+  .wrap{
+    width:100%;
+    max-width:none;
+    margin:0 auto;
+    padding:clamp(16px, 2vw, 36px) clamp(16px, 2.5vw, 48px) clamp(40px, 4vw, 80px);
+    position:relative;
+    z-index:1;
+  }
+  /* Pada layar sangat lebar (>1800px) tetap mudah dibaca tanpa terlalu melar */
+  @media (min-width: 1800px){
+    .wrap{ max-width:1760px; }
+  }
+  /* Pastikan html & body full tinggi viewport */
+  html, body{ width:100%; }
+  body{ min-height:100vh; }
   h1,h2,h3,.display{font-family:'Outfit',sans-serif;}
 
   /* SCROLL REVEAL */
@@ -1236,6 +1253,7 @@ document.getElementById('fileInput').addEventListener('change', async (e)=>{
 })();
 loadPersisted();
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
